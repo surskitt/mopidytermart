@@ -35,18 +35,6 @@ def get_client(timeout, host, port):
                 sys.exit(1)
 
 
-def placement_gen(name, width):
-    with ueberzug.Canvas() as c:
-        placement = c.create_placement(name, x=0, y=0)
-
-    placement.path = mopidyartfetch.get_fn('blank')
-    placement.max_height = os.get_terminal_size().lines - 1
-    placement.max_width = width
-    placement.visibility = ueberzug.Visibility.VISIBLE
-
-    return placement
-
-
 def get_uri(song):
     for i in ['x-albumuri', 'file']:
         uri = song.get(i)
@@ -54,10 +42,16 @@ def get_uri(song):
             return uri
 
 
-def main():
+@ueberzug.Canvas()
+def main(canvas):
     opts = get_opts()
     client = get_client(opts.timeout, opts.host, opts.port)
-    placement = placement_gen('placement', opts.width)
+
+    placement = canvas.create_placement('placement', x=0, y=0)
+    placement.path = mopidyartfetch.get_fn('blank')
+    placement.max_height = os.get_terminal_size().lines - 1
+    placement.max_width = opts.width
+    placement.visibility = ueberzug.Visibility.VISIBLE
 
     while True:
         song = client.currentsong()
