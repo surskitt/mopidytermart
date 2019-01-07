@@ -1,4 +1,4 @@
-# mopidy-term-art
+# mopidytermart
 
 Display mopidy album art in the terminal
 
